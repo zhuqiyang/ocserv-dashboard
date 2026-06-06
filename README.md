@@ -1,5 +1,7 @@
 # ocserv Dashboard
 
+[中文版](README_zh-CN.md) | English
+
 Web-based management dashboard for [ocserv](https://ocserv.openconnect-vpn.net/) (OpenConnect VPN server).
 
 ## Features
