@@ -1,48 +1,48 @@
 # ocserv Dashboard
 
-[中文版](README_zh-CN.md) | English
+[English](README_en.md) | 中文版
 
-Web-based management dashboard for [ocserv](https://ocserv.openconnect-vpn.net/) (OpenConnect VPN server).
+基于 Web 的 [ocserv](https://ocserv.openconnect-vpn.net/)（OpenConnect VPN 服务器）管理面板。
 
-## Features
+## 功能特性
 
-- **Dashboard** — user info, VPN status, server status, online users
-- **User Management** — add / delete / lock / unlock users
-- **Online Users** — view connected clients, disconnect on demand
-- **Change Password** — users can change their own VPN password
-- **i18n** — Chinese (zh-CN) and English (en) with one-click switch
-- **JWT Auth** — stateless authentication against ocserv's `ocpasswd` file
+- **仪表盘** — 用户信息、VPN 状态、服务器状态、在线用户
+- **用户管理** — 添加 / 删除 / 锁定 / 解锁用户
+- **在线用户** — 查看已连接的客户端，按需断开连接
+- **修改密码** — 用户可自行修改 VPN 密码
+- **国际化** — 中文（zh-CN）和英文（en），一键切换
+- **JWT 认证** — 基于 ocserv 的 `ocpasswd` 文件进行无状态认证
 
-## Tech Stack
+## 技术栈
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Python 3 + Flask + Gunicorn |
-| Frontend | Vue 3 + Vue Router + Axios |
-| i18n | Backend JSON locales, Frontend vue-i18n |
-| Auth | JWT (HS256) against `/etc/ocserv/ocpasswd` |
+| 层级 | 技术 |
+|------|------|
+| 后端 | Python 3 + Flask + Gunicorn |
+| 前端 | Vue 3 + Vue Router + Axios |
+| 国际化 | 后端 JSON 语言文件，前端 vue-i18n |
+| 认证 | JWT (HS256)，基于 `/etc/ocserv/ocpasswd` |
 
-## Prerequisites
+## 环境要求
 
 - Python 3.8+
 - Node.js 18+
-- ocserv (provides `ocpasswd` and `occtl`)
+- ocserv（提供 `ocpasswd` 和 `occtl` 命令）
 
-## Quick Install
+## 快速安装
 
 ```bash
 sudo bash install.sh
 ```
 
-The script will:
-1. Install system dependencies (Python venv, Node.js)
-2. Set up Python virtual environment and install packages
-3. Build the Vue 3 frontend
-4. Install and start the systemd service
+脚本将自动完成以下步骤：
+1. 安装系统依赖（Python venv、Node.js）
+2. 创建 Python 虚拟环境并安装依赖包
+3. 构建 Vue 3 前端
+4. 安装并启动 systemd 服务
 
-## Manual Setup
+## 手动部署
 
-### Backend
+### 后端
 
 ```bash
 cd backend
@@ -52,16 +52,16 @@ pip install -r requirements.txt
 python app.py --host 0.0.0.0 --port 5000
 ```
 
-### Frontend
+### 前端
 
 ```bash
 cd frontend
 npm install
-npm run build        # production build → dist/
-npm run dev          # dev server on :5173 with API proxy
+npm run build        # 生产构建 → dist/
+npm run dev          # 开发服务器 :5173，含 API 代理
 ```
 
-### Systemd Service
+### Systemd 服务
 
 ```bash
 sudo cp ocserv-manager.service /etc/systemd/system/
@@ -69,63 +69,63 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now ocserv-manager
 ```
 
-## Usage
+## 使用说明
 
-| URL | Description |
-|-----|-------------|
-| `http://<host>:5000/` | Web UI |
-| `http://<host>:5000/api/health` | Health check |
-| `http://<host>:5000/api/lang` | Current language |
+| URL | 说明 |
+|-----|------|
+| `http://<host>:5000/` | Web 管理界面 |
+| `http://<host>:5000/api/health` | 健康检查 |
+| `http://<host>:5000/api/lang` | 当前语言 |
 
-### Default Login
+### 默认登录
 
-Use your existing ocserv account credentials. The user `admin` (or any user in a group containing "admin") has administrator privileges.
+使用已有的 ocserv 账号密码登录。用户名为 `admin`（或所在组包含 "admin" 的用户）具有管理员权限。
 
-## API Endpoints
+## API 接口
 
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| GET | `/api/health` | — | Health check |
-| POST | `/api/login` | — | Login, returns JWT |
-| GET | `/api/me` | user | Current user info |
-| GET | `/api/users` | admin | List all users |
-| POST | `/api/users` | admin | Add user |
-| DELETE | `/api/users/<name>` | admin | Delete user |
-| POST | `/api/users/<name>/lock` | admin | Lock / unlock user |
-| GET | `/api/users/online` | admin | Online users |
-| POST | `/api/users/<name>/disconnect` | admin | Disconnect user |
-| POST | `/api/change-password` | user | Change own password |
-| GET | `/api/server/status` | admin | ocserv server status |
+| 方法 | 路径 | 权限 | 说明 |
+|------|------|------|------|
+| GET | `/api/health` | — | 健康检查 |
+| POST | `/api/login` | — | 登录，返回 JWT |
+| GET | `/api/me` | 用户 | 当前用户信息 |
+| GET | `/api/users` | 管理员 | 列出所有用户 |
+| POST | `/api/users` | 管理员 | 添加用户 |
+| DELETE | `/api/users/<name>` | 管理员 | 删除用户 |
+| POST | `/api/users/<name>/lock` | 管理员 | 锁定 / 解锁用户 |
+| GET | `/api/users/online` | 管理员 | 在线用户列表 |
+| POST | `/api/users/<name>/disconnect` | 管理员 | 断开用户连接 |
+| POST | `/api/change-password` | 用户 | 修改自己的密码 |
+| GET | `/api/server/status` | 管理员 | ocserv 服务器状态 |
 
-### Language Detection
+### 语言检测
 
-Set the `Accept-Language` header in API requests:
+在 API 请求中设置 `Accept-Language` 请求头：
 
 ```bash
 curl -H "Accept-Language: zh-CN" http://host:5000/api/login ...
 curl -H "Accept-Language: en"    http://host:5000/api/login ...
 ```
 
-## Project Structure
+## 项目结构
 
 ```
 ocserv-manager/
 ├── backend/
-│   ├── app.py              # Flask application
-│   ├── i18n.py             # Translation module
-│   ├── requirements.txt    # Python dependencies
+│   ├── app.py              # Flask 应用
+│   ├── i18n.py             # 翻译模块
+│   ├── requirements.txt    # Python 依赖
 │   └── locales/
-│       ├── en.json         # English translations
-│       └── zh_CN.json      # Chinese translations
+│       ├── en.json         # 英文翻译
+│       └── zh_CN.json      # 中文翻译
 ├── frontend/
 │   ├── index.html
 │   ├── package.json
 │   ├── vite.config.js
 │   └── src/
-│       ├── main.js         # App entry
-│       ├── i18n.js         # vue-i18n setup
-│       ├── App.vue         # Root component + navbar
-│       ├── router/index.js # Vue Router
+│       ├── main.js         # 应用入口
+│       ├── i18n.js          # vue-i18n 配置
+│       ├── App.vue          # 根组件 + 导航栏
+│       ├── router/index.js  # Vue Router
 │       ├── locales/
 │       │   ├── en.json
 │       │   └── zh-CN.json
@@ -134,11 +134,12 @@ ocserv-manager/
 │           ├── Dashboard.vue
 │           ├── AdminUsers.vue
 │           └── ChangePassword.vue
-├── install.sh              # One-click installer
-├── ocserv-manager.service  # systemd unit
-└── README.md
+├── install.sh              # 一键安装脚本
+├── ocserv-manager.service  # systemd 单元文件
+├── README.md               # 中文文档（默认）
+└── README_en.md            # 英文文档
 ```
 
-## License
+## 开源协议
 
 MIT
